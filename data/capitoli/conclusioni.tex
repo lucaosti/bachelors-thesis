@@ -1,0 +1,29 @@
+\section{Conclusioni}
+Nei capitoli precedenti, attraverso gli esempi osservati, abbiamo approcciato lo stesso problema in diversi modi, utilizzando più di un metodo per migliorare la fruizione all'utente e lo sforzo mnemonico del sistema.\par
+
+\subsection{Approccio classico}\label{conclusioni_caso1}
+Applicare direttamente tutti i principi dell'algoritmo di Hough, abbiamo visto essere inefficace agli obiettivi che ci siamo posti. Questo perché l'algoritmo originale prevede di avere una dimensione per ogni parametro della curva nell'immagine; ciò porta ad utilizzare un tensore quadridimensionale.\par
+La rappresentazione di cinque dimensioni in modo comprensibile all'utente, cioè che non induca in errori di interpretazione, è pressoché impossibile.\par
+Oltre questo, mantenere in memoria una quantità di dati abnorme e, su questi, ricercare massimi locali all'interno del tensore è anche computazionalmente complesso.\par
+È di facile comprensione la grande quantità di valori presenti, nel caso si intenda analizzare un'immagine Full-HD\footnote{Le immagini Full HD hanno una risoluzione pari a 1920x1080 pixel.} per un discreto numero di curve. Se ipotiziamo valori di $a$ in un range $[0.1,\ 2]$ con passo di $0.05$ e, $d$ in un range $[10,\ \text{<numero di righe>}]$ con passo $2$, otteniamo facilmente:
+$$\text{Numero di valori} = \underbrace{1920\times 1080}_{\text{dim. immagine}}\times\underbrace{\frac{2-0.1}{0.05}}_{\text{valori di a}}\times\underbrace{\frac{1080-10}{2}}_{\text{valori di d}}\approx 20\times10^9$$
+
+\subsection{Approccio classico limitato}\label{conclusioni_caso2}
+Successivamente abbiamo provato ad arginare questi due macro problemi fissando una dimensione. Abbiamo deciso di fissare $d$, in quanto è possibile che l'ampiezza delle curve sia dovuta ad una costante fisica: nel caso di satelliti non geostazionari, potrebbe essere la velocità relativa del satellite rispetto alla terra.\par
+Per quanto riguarda il numero di valori, questo approccio permette di limitarli relativamente.\par
+Nell'esempio di prima, possiamo togliere l'ultimo rapporto, lasciando:
+$$\text{Numero di valori} = \underbrace{1920\times 1080}_{\text{dim. immagine}}\times\underbrace{\frac{2-0.10}{0.05}}_{\text{valori di a}}\times \underbrace{1}_{\text{valori di d}}\approx 37\times10^6$$
+Questo metodo, a differenza degli altri due, riduce anche le iterazioni necessarie per il computo delle occorrenze.\par
+Mentre per quanto riguarda la visualizzazione, abbiamo trovato un metodo che, oltre alle tre dimensioni classiche, usa i colori.\par
+Tuttavia, questo metodo crea un grafico che non è esattamente di immediata lettura e questo può portare a notevoli errori. Per avere un'informativa completa è necessario traslare i vari piani di taglio per visualizzare tutte le possibili combinazioni, questo richiede tempo e conoscenza da parte dell'utente.\par
+
+\subsection{Approccio innovativo}
+Il nostro approccio coniuga la semplicità rappresentativa del risultato con una ridotta necessità di memoria.\par
+Questo perché la struttura che accoglie i dati è una semplice matrice bidimensionale. Essa è rappresentante dell'immagine, quindi abbiamo come coordinate della matrice quelle dei pixel.\par
+Come abbiamo visto nell'\hyperref[lst:ostinelli]{algoritmo}, il sistema salva i dati inerenti alla curva testata e al numero di occorrenze che questa ha generato, solo nel caso in cui non ci sia stata una curva già testata con maggior numero di occorrenze.\par
+Facendo questo, ci accorgiamo che il numero di dati salvati è leggermente minore del \hyperref[conclusioni_caso2]{secondo caso} e sensibilmente del \hyperref[conclusioni_caso1]{primo}.
+$$\text{Numero di valori} = \underbrace{1920\times 1080}_{\text{dim. immagine}}\times\underbrace{3}_{\text{num. parametri}}\approx 6\times10^6$$
+
+\subsubsection{Fragilità principale}
+Come abbiamo visto nel \hyperref[fig:sintentica_ostinelli_6]{sesto esempio} delle immagini sintetiche e nel \hyperref[fig:reale_ostinelli_2]{secondo esempio} delle immagini reali, il nostro algoritmo, in caso di più curve ad S presenti nell'immagine, rischia di segnalare la presenza di curve in realtà inesistenti. Questi falsi positivi, sono dati dalla sovrapposizione immaginaria di una curva più grande con le due più piccole.\par
+Questo problema è intrinseco alla nostra scelta di rappresentare in uno stesso grafico a prescindere dai parametri delle stesse.

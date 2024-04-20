@@ -1,0 +1,78 @@
+\section{Proviamo con delle immagini satellitari}
+Le immagini satellitari sono realizzate utilizzando sensori in orbita attorno alla Terra. Questi sensori catturano la luce riflessa dalla superficie terrestre in diverse bande dello spettro elettromagnetico.\par
+Le curve ad S segnalano la presenza di un target, ma oltre a quel segnale abbiamo un notevole rumore sottoforma di bande verticali multicolore che possono essere il risultato di riflessi atmosferici, errori di calibrazione o disturbi durante la trasmissione dei dati.
+
+\subsection{Eliminazione del rumore}
+Prima di applicare \hyperref[lst:ostinelli]{l'algoritmo per la generazione di grafici tridimensionali}, è cruciale affrontare l'aspetto relativo all'elaborazione dell'immagine satellitare, che come detto prima presenta anche la complessità di separare il segnale dal rumore.\par
+Per far ciò, è indispensabile sviluppare un metodo efficace per gestire questo tipo di input. Negli esempi a nostra disposizione, siamo riusciti a svolgere un discreto lavoro di separazione delle due componenti tramite un semplice filtro composto da una maschera che seleziona i toni del rosso, eliminando gli altri. Spesso potrebbe essere necessario un procedimento più complesso.
+
+\vspace{10pt}
+\lstinputlisting[
+    style=matlabStyle,
+    caption={Codice per l'isolamento della scala cromatica d'interesse},
+    label={lst:PulisciImmagine}
+]{codici/PulisciImmagine.m}
+\vspace{10pt}
+
+A questo punto, l'immagine ottenuta può essere passata allo \hyperref[lst:ostinelli]{stesso algoritmo} di prima per ottenere la matrice delle occorrenze da graficare.\par
+Negli esempi sottostanti, è possibile vedere anche l'esito dell'applicazione di questo filtro.
+
+\newpage
+\subsection{Analisi degli esempi reali}
+Come vediamo dagli esempi, l'algoritmo è in grado di rilevare correttamente il \hyperref[fig:reale_ostinelli_1]{primo caso}, che è segnalato da un picco proprio in concomitanza del centro della curva.\par
+Per quanto riguarda il \hyperref[fig:reale_ostinelli_2]{secondo caso}, invece, abbiamo più considerazioni da fare.\par
+Proprio quest'ultimo, infatti, sottopone ad un notevole stress il nostro algoritmo poiché ha una serie di curve, con parametro $a$, che ricordiamo essere la velocità di crescita, molto vario e un parametro $d$, l'ampiezza della curva, pressoché fissa.\par
+Il riconoscimento evidenzia infatti un picco in posizione della curva di maggior lunghezza, appartenente alla curva col maggior numero di occorrenze ed una serie di picchi più piccoli in posizione delle altre. Inoltre l'immagine ha delle curve che sono presenti a tratti, proprio in questi casi la scelta della soglia critica ha bisogno di particolari valutazioni, in quanto è autoevidente che tali curve avranno picchi mutiliati.\par
+Il problema che avevamo riscontrato parzialemente nel \hyperref[fig:sintentica_ostinelli_6]{sesto esempio} del capitolo precedente\footnote{quello inerente a curve distinte che, per alcuni parametri $a$ e $d$, potrebbero andare a votare per un'unico punto.}, invece, è qui di nuovo presente. Alcune interazioni tra le curve tendono a presentare picchi di minor entità.\par
+In immagini reali molto complesse, il nostro algoritmo potrebbe quindi presentare dei falsi positivi difficili da rimuovere.
+
+% Esempi
+\foreach \i in {1,...,2} {
+    \newpage
+    \subsubsection{Esempio con immagine reale n.\i}
+    \begin{center}
+    \begin{figure}[H]
+        \label{fig:reale_ostinelli_\i}
+        \centering
+        \foreach \j/\desc in {input/Input,modificato/Input modificato} {
+            \begin{subfigure}{0.38\textwidth}
+                \centering
+                \includegraphics[width=\linewidth, frame]{immagini/reali/\i_\j.png}
+                \caption*{\desc}
+            \end{subfigure}
+            \ifnum\pdfstrcmp{\j}{modificato}=0
+            \else
+                \hspace{20pt}
+            \fi
+        }
+
+        \vspace{20pt}
+        
+        \foreach \j/\desc in {isometrica/Isometrica,sotto/Sotto} {
+            \begin{subfigure}{0.38\textwidth}
+                \centering
+                \includegraphics[width=\linewidth, frame]{immagini/ostinelli_risultati_reali/\i_\j.png}
+                \caption*{\desc}
+            \end{subfigure}
+            \ifnum\pdfstrcmp{\j}{sotto}=0
+            \else
+                \hspace{20pt}
+            \fi
+        }
+
+        \vspace{20pt}
+        
+        \foreach \j/\desc in {davanti_X/Vista da X,davanti_Y/Vista da Y} {
+            \begin{subfigure}{0.38\textwidth}
+                \centering
+                \includegraphics[width=\linewidth, frame]{immagini/ostinelli_risultati_reali/\i_\j.png}
+                \caption*{\desc}
+            \end{subfigure}
+            \ifnum\pdfstrcmp{\j}{davanti_Y}=0
+            \else
+                \hspace{20pt}
+            \fi
+        }
+    \end{figure}
+    \end{center}
+}
