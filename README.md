@@ -1,6 +1,5 @@
-# bachelors-thesis
-Tesi triennale in Ingegneria Informatica.
+# Tesi triennale in Ingegneria Informatica
 
-Candidato [Luca Ostinelli](http://lucaosti.github.io)
+Candidato [Luca Ostinelli](http://lucaosti.github.io).
 
-Relatore [Prof. Marco Cococcioni](http://docenti.ing.unipi.it/m.cococcioni/)
+Relatore [Prof. Marco Cococcioni](http://docenti.ing.unipi.it/m.cococcioni/).
