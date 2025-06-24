@@ -1,7 +1,12 @@
-# Tesi triennale in Ingegneria Informatica
+# Bachelor’s Degree Thesis in Computer Engineering
 
-## Università di Pisa - Scuola di Ingegneria
+**University of Pisa – School of Engineering**
 
-Candidato [Luca Ostinelli](http://lucaosti.github.io).
+---
 
-Relatore [Prof. Marco Cococcioni](http://docenti.ing.unipi.it/m.cococcioni/).
+**Candidate**: [Luca Ostinelli](http://lucaosti.github.io)  
+**Supervisor**: [Prof. Marco Cococcioni](http://docenti.ing.unipi.it/m.cococcioni/)
+
+---
+
+*Academic Year: 2023/2024*
